@@ -31,8 +31,39 @@ nastavite čitati skriptu!
 
 Vrlo jednostavnu, dobro komentiranu i pogrešnu implementaciju ovog
 programa vidimo na primjeru
-<a href="#listing:calc_naive" data-reference-type="ref"
-data-reference="listing:calc_naive">[listing:calc_naive]</a>.
+### Primjer 6.5: Kalkulator - naivna implementacija
+
+```python
+# 1. UNOS ULAZNIH PODATAKA
+# -------------------------
+# pitaj korisnika za odabir operacije i unos potrebnih brojeva
+n1 = input('Unesi prvi broj: ')
+operation = input('Odaberi operator (+,-): ')
+n2 = input('Unesi drugi broj: ')
+
+# 2. IZRAČUN
+# -------------------------
+# pronađi rezultat ovisno o odabiru operacije
+if operation == '+':
+    # Ovdje je POGREŠKA: n1 i n2 su stringovi (tekst), ne brojevi.
+    # Operacija '+' nad stringovima je SPJANJE (konkatenacija), npr. "1" + "1" = "11"
+    result = n1 + n2
+elif operation == '-':
+    # Ovdje će program najvjerojatnije javiti grešku jer ne može 
+    # oduzeti jedan string od drugog.
+    result = n1 - n2
+else:
+    result = None
+    print('GREŠKA: nepoznata operacija!')
+
+# 3. ISPIS REZULTATA
+# -------------------------
+print() # ispiši prazan redak
+print('Rezultat je: ', result)
+print()
+
+input('Program je završio s radom, pritisni <enter> za kraj.')
+```
 
 Program smo podijelili u tri sekcije: unos ulaznih podataka, izračun i
 ispis rezultata.
@@ -60,17 +91,17 @@ izvještavanje su neke zadaće koje će nam često biti svrsishodne.
 
 Ipak program je pogrešan. Pogledajmo rezultat ovog programa:
 
-<div class="pythonp">
+### Rezultat primjera 6.5
 
-<a href="#listing:calc_naive" data-reference-type="ref"
-data-reference="listing:calc_naive">[listing:calc_naive]</a> Unesi prvi
-broj: 1 Odaberi operator (+,-): + Unesi drugi broj: 1
+```
+Unesi prvi broj: 1
+Odaberi operator (+,-): +
+Unesi drugi broj: 1
 
 Rezultat je: 11
-
-Program je završio s radom, pritisni \<enter\> za kraj.
-
-</div>
+ 
+Program je završio s radom, pritisni <enter> za kraj.
+```
 
 Kao što vidimo, rezultat izračuna `1 + 1` je prema našem programu `11`.
 U čemu je problem? Greškom smo napravili program koji kada unesemo
@@ -97,23 +128,63 @@ S tekstom još nismo detaljno radili, ali ovaj primjer može poslužiti kao
 uvod. Iskoristiti ćemo metodu `str.split` kako bismo maknuli "prazan
 prostor" koji prethodi ili dolazi nakon operatora. Time ćemo pripremiti
 ulazne vrijednosti za daljnji rad. Dorađeni program je vidljiv na
-primjeru <a href="#listing:calc_types" data-reference-type="ref"
-data-reference="listing:calc_types">[listing:calc_types]</a>
+primjeru 6.6
+### Primjer 6.6: Kalkulator - priprema ulaznih podataka
+
+```python
+# 1. UNOS ULAZNIH PODATAKA
+# -------------------------
+# 1.1. pitaj korisnika za odabir operacije i unos potrebnih brojeva
+n1 = input('Unesi prvi broj: ') # rezultat funkcije input je uvijek str
+operation = input('Odaberi operator (+,-): ')
+n2 = input('Unesi drugi broj: ')
+
+
+# 1.2. pripremi korisnički unos
+# ukloni prazan prostor oko operacije
+operation = operation.strip()
+# rezultat funkcije input je uvijek str pa n1 i n2 moramo pretvoriti u brojeve
+n1 = float(n1) # pretvara tekst tipa '3.14' i '42' u broj
+n2 = float(n2)
+```
+
+```python
+# 2. IZRAČUN
+# -------------------------
+# pronađi rezultat ovisno o odabiru operacije
+if operation == '+':
+   result = n1 + n2
+elif operation == '-':
+   result = n1 - n2
+else:
+   result = None
+   print('GREŠKA: nepoznata operacija!')
+
+ 
+# 3. ISPIS REZULTATA
+# -------------------------
+print() # ispiši prazan redak
+print('Rezultat je: ', result)
+print()
+
+
+input('Program je završio s radom, pritisni <enter> za kraj.')
+```
 
 Sada program provodi aritmetičke operacije s brojevima i ignorira prazan
 prostor oko operatora. Rezultat je sljedeći:
 
-<div class="pythonp">
+### Rezultat primjera 6.6
 
-<a href="#listing:calc_types" data-reference-type="ref"
-data-reference="listing:calc_types">[listing:calc_types]</a> Unesi prvi
-broj: 3.14 Odaberi operator (+,-): + Unesi drugi broj: 25
+```
+Unesi prvi broj: 3.14
+Odaberi operator (+,-): +
+Unesi drugi broj: 25
 
 Rezultat je: 28.14
 
-Program je završio s radom, pritisni \<enter\> za kraj.
-
-</div>
+Program je završio s radom, pritisni <enter> za kraj.
+```
 
 Nakon zaprimanja i pripreme korisničkog unosa, program provodi same
 izračune. Ova komponenta zapravo obavlja glavnu radnju cijelog programa.
@@ -157,9 +228,30 @@ funkcija `float` ne može interpretirati kao decimalan broj, program će
 javiti grešku i završiti s izvršavanjem. Iz perspektive korisnika koji
 ga je pokrenuo kroz ikonu python datoteke, "srušit će se" bez poruke
 zašto. Kako bi izbjegli da se program ruši prilikom pogrešnog unosa
-broja, možemo iskoristiti naredbu `try` kako je prikazano u primjeru
-<a href="#listing:calc_try" data-reference-type="ref"
-data-reference="listing:calc_try">[listing:calc_try]</a>.
+broja, možemo iskoristiti naredbu `try` kako je prikazano u primjeru 6.7
+
+### Primjer 6.7: Kalkulator - izbjegavanje rušenja prilikom pogrešnog unosa
+
+```python
+# 1. UNOS ULAZNIH PODATAKA
+# -------------------------
+# unos podataka i priprema podataka je ista kao i prije
+# ...
+
+try: # pokušaj pretvoriti tekst u broj
+     n1 = float(n1)
+     n2 = float(n2)
+ except ValueError: # ako ne uspiješ radi ValueError pogreške
+     # koristimo funkciju input kako bi pričekali "enter" od korisnika
+     # i tako osigurali da je vidio poruku
+     input('\nGREŠKA: Oblik broja nije prepoznat! Program završava s radom.')
+     quit() # izlazi iz programa, nastavak bi samo proizveo nove greške
+
+ # 2. IZRAČUN
+ # -------------------------
+ # ostatak kôda je isti kao i prije
+ # ...
+```
 
 U ovom primjeru smo vidjeli i funkciju `quit` koja ne prima parametre i
 jednostavno prekida izvršavanje programa. Sav kôd nakon funkcije `quit`
@@ -169,16 +261,15 @@ kada se dogodi greška koja bi priječila daljnje izvršavanje programa. U
 prikazanom slučaju je to kada program nije dobio validne ulaze i ne bi
 imalo smisla nastavljati s radom. Primjer možemo vidjeti u akciji na
 sljedećem ispisu:
+### Rezultat primjera 6.7
 
-<div class="pythonp">
-
-<a href="#listing:calc_try" data-reference-type="ref"
-data-reference="listing:calc_try">[listing:calc_try]</a> Unesi prvi
-broj: 3.14 Odaberi operator (+,-): + Unesi drugi broj: neću!
-
-GREŠKA: Oblik broja nije prepoznat! Program završava s radom.
-
-</div>
+```
+ Unesi prvi broj: 3.14
+ Odaberi operator (+,-): +
+ Unesi drugi broj: neću!
+ 
+ GREŠKA: Oblik broja nije prepoznat! Program završava s radom.
+```
 
 Kao što vidimo, program se sada ne ruši kad korisnik upiše pogrešan
 oblik broja i to čak ni kada korisnik prgavo (kakvi korisnici i jesu)
@@ -188,8 +279,75 @@ više operacija u jednom pokretanju programa. To možemo postići pomoću
 onoga što već znamo o petlji `while` koja se ponavlja broj beskonačan
 broj puta i prestaje samo kada korisnik zatraži izlazak iz programa.
 Rješenje je prikazano u primjeru
-<a href="#listing:calc_while" data-reference-type="ref"
-data-reference="listing:calc_while">[listing:calc_while]</a>.
+### Primjer 6.8: Kalkulator - ponovno izvršavanje
+
+```python
+ # svi znakovi koji su validne operacije
+ validne_operacije = '+-I'
+
+ 
+ # SVAKA ITERACIJA OVE PETLJE JE JEDNA 'OPERACIJA' ZAJEDNO SA
+ # SVIM UNOSIMA, PRIPREMAMA I IZRAČUNIMA
+ while True:
+ 
+     # jasno vizualno odvojiti svako pokretanje petlje
+     print ('\n' + 10 * '#') # ispiši deset minusa
+ 
+     # 1. UNOS ULAZNIH PODATAKA
+     # 1.1. pitaj korisnika za odabir operacije i razriješi unos
+     operation = input('Odaberi operator (+,-) ili unesi "I" za izlaz: ')
+ 
+     # 1.2. pripremi korisnički unos
+     # ukloni prazan prostor oko operacije
+     operation = operation.strip().upper()
+ 
+     # provjeri da li je operacija u skupu poznatih operacija
+     if operation not in validne_operacije:
+         # ako je unos ispravno pripremljen i kreni s petljom ispočetka
+         print('\nGREŠKA: Odabrana je nepoznata operacija! Pokušaj ponovo!')
+         continue
+ 
+     # bez ovog dijela naš program bi se izvršavao zauvijek
+     if operation == 'I': # I -> izlaz
+         # ako je korisnik odabrao izlaz, prekini glavnu petlju
+         break
+ 
+     # 1.3. pitaj korisnika za unos brojeva i razriješi unos
+     n1 = input('Unesi prvi broj: ')
+     n2 = input('Unesi drugi broj: ')
+
+     # pokušaj pretvoriti tekst u broj!
+     try: 
+         n1 = float(n1)
+         n2 = float(n2)
+     except ValueError:
+         # ovaj dio koda ne treba izlaziti iz programa već samo prijeći na
+         # novu operaciju, odnosno na novu iteraciju naše glavne petlje
+         print('\nGREŠKA: Oblik broja nije prepoznat! Pokušaj ponovo.')
+         continue
+ 
+     # 2. IZRAČUN
+     # -------------------------
+     # izračunaj rezultat ovisno o idućoj operaciji
+     if operation == '+':
+         result = n1 + n2
+     elif operation == '-':
+         result = n1 - n2
+     else:
+         # do ovog slučaja više ne smije doći jer sve provjeravamo ranije
+         # ipak, možemo javiti posebnu grešku da nešto ne potrgamo
+         raise Exception('Greška u provjeri operatora. Provjeri kôd.')
+ 
+     # 3. ISPIS REZULTATA
+     # -------------------------
+     print('\nRezultat je: ', result)
+     
+     # ovaj dio se izvršava izvan petlje, dakle točno nakon što je korisnik 
+     # odabrao 'I' kao operaciju
+ print('\n' + 10 * '*')
+ 
+ input('Program je završio s radom, pritisni <enter> za kraj.')
+```
 
 Kao što vidimo, cijeli postupak smo prebacili unutar beskonačne `while`
 petlje koja time ponavlja cijeli naš dosadašnji program. Program smo
@@ -207,44 +365,43 @@ Naš kalkulator je još uvijek vrlo primitivan, zna samo zbrajati i
 oduzimati, ali demonstrira nam mnoge različite koncepte u programiranju.
 Omogućava ponovljene radnje i otporan je na najčešće korisničke greške.
 Korištenje programa sada izgleda ovako:
+### Rezultat primjera 6.8
 
-<div class="pythonp">
-
-<a href="#listing:calc_while" data-reference-type="ref"
-data-reference="listing:calc_while">[listing:calc_while]</a> ———-
-
-Odaberi operator (+,-) ili unesi "i" za izlaz: + Unesi prvi broj: 3.14
-Unesi drugi broj: 25
-
-Rezultat je: 28.14
-
-———-
-
-Odaberi operator (+,-) ili unesi "i" za izlaz: - Unesi prvi broj: 2
-Unesi drugi broj: 7
-
-Rezultat je: -5.0
-
-———-
-
-Odaberi operator (+,-) ili unesi "i" za izlaz: x
-
-GREŠKA: Odabrana je nepoznata operacija, pokušaj ponovo!
-
-———-
-
-Odaberi operator (+,-) ili unesi "i" za izlaz: + Unesi prvi broj: 42
-Unesi drugi broj: neću
-
-GREŠKA: Oblik broja nije prepoznat! Pokušaj ponovo.
-
-———-
-
-Odaberi operator (+,-) ili unesi "i" za izlaz: I
-
-———- Program je završio s radom, pritisni \<enter\> za kraj.
-
-</div>
+```
+ ----------
+ Odaberi operator (+,-) ili unesi "i" za izlaz: +
+ Unesi prvi broj: 3.14
+ Unesi drugi broj: 25
+ Rezultat je: 28.14
+ 
+ ----------
+ ----------
+ Odaberi operator (+,-) ili unesi "i" za izlaz: -
+ Unesi prvi broj: 2
+ Unesi drugi broj: 7
+ Rezultat je: -5.0
+ 
+ ----------
+ 
+ ----------
+ Odaberi operator (+,-) ili unesi "i" za izlaz: X
+ GREŠKA: Odabrana je nepoznata operacija! Pokušaj ponovo!
+ 
+ ----------
+ 
+ Odaberi operator (+,-) ili unesi "i" za izlaz: +
+ Unesi prvi broj: 42
+ Unesi drugi broj: neću
+ 
+ GREŠKA: Oblik broja nije prepoznat! Pokušaj ponovo.
+ 
+ ----------
+ 
+ Odaberi operator (+,-) ili unesi "i" za izlaz: I
+ 
+ ----------
+ Program je završio s radom, pritisni <enter> za kraj.
+```
 
 Ipak, program je prebanalan kako bi bio od koristi kao stvaran
 kalkulator. Recimo da želimo zadovoljiti još barem dvije mogućnosti:
@@ -266,3 +423,4 @@ ovaj problem kad budemo naoružani znanjem kako kôd generalizirati i
 apstrahirati.
 
 [^1]: Koju vrstu vrijednosti vraća funkcija `input`?
+
