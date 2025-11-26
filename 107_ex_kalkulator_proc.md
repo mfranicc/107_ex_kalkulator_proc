@@ -6,10 +6,13 @@ bi isprogramirali jednostavan kalkulator. Krenimo s jasnim nabrajanjem
 
 <div class="important">
 
-Planiranje programa Program valja prvo dobro isplanirati pa tek zatim
+>**Planiranje programa**
+    
+>Program valja prvo dobro isplanirati pa tek zatim
 implementirati. Dobra praksa je krenuti od rješavanja najjednostavnijeg
 mogućeg slučaja kao prototipa pa zatim razmisliti o nadogradnji
 mogućnosti i boljoj organizaciji kôda.
+
 
 </div>
 
@@ -25,14 +28,15 @@ Najjednostavniji slučaj za kalkulator bi mogao zvučati ovako:
 
 Implementirajte opisani program. Struktura programa je vrlo slična
 primjeru <a href="#listing:kviz" data-reference-type="ref"
-data-reference="listing:kviz">[listing:kviz]</a>, ali valja razmisliti i
+data-reference="listing:kviz">1.11</a>, ali valja razmisliti i
 o vrstama vrijednosti[^1]. Pokušajte napisati ovaj program prije no što
 nastavite čitati skriptu!
 
 Vrlo jednostavnu, dobro komentiranu i pogrešnu implementaciju ovog
 programa vidimo na primjeru
-### Primjer 6.5: Kalkulator - naivna implementacija
 
+### Primjer 6.5: Kalkulator - naivna implementacija
+----
 ```python
 # 1. UNOS ULAZNIH PODATAKA
 # -------------------------
@@ -64,7 +68,7 @@ print()
 
 input('Program je završio s radom, pritisni <enter> za kraj.')
 ```
-
+----
 Program smo podijelili u tri sekcije: unos ulaznih podataka, izračun i
 ispis rezultata.
 
@@ -83,7 +87,9 @@ obaviti.
 
 <div class="important">
 
-Podjela odgovornosti Programe je dobro odvajati u različite dijelove sa
+>**Podjela odgovornosti**
+>
+> Programe je dobro odvajati u različite dijelove sa
 jasnim zadaćama. Korisnički unos (odnosno sučelje), izračun i
 izvještavanje su neke zadaće koje će nam često biti svrsishodne.
 
@@ -92,7 +98,7 @@ izvještavanje su neke zadaće koje će nam često biti svrsishodne.
 Ipak program je pogrešan. Pogledajmo rezultat ovog programa:
 
 ### Rezultat primjera 6.5
-
+----
 ```
 Unesi prvi broj: 1
 Odaberi operator (+,-): +
@@ -102,7 +108,7 @@ Rezultat je: 11
  
 Program je završio s radom, pritisni <enter> za kraj.
 ```
-
+----
 Kao što vidimo, rezultat izračuna `1 + 1` je prema našem programu `11`.
 U čemu je problem? Greškom smo napravili program koji kada unesemo
 operator `+` on zapravo spaja tekst, a ne zbraja brojeve! Naime,
@@ -130,7 +136,7 @@ prostor" koji prethodi ili dolazi nakon operatora. Time ćemo pripremiti
 ulazne vrijednosti za daljnji rad. Dorađeni program je vidljiv na
 primjeru 6.6
 ### Primjer 6.6: Kalkulator - priprema ulaznih podataka
-
+----
 ```python
 # 1. UNOS ULAZNIH PODATAKA
 # -------------------------
@@ -147,6 +153,8 @@ operation = operation.strip()
 n1 = float(n1) # pretvara tekst tipa '3.14' i '42' u broj
 n2 = float(n2)
 ```
+----
+----
 
 ```python
 # 2. IZRAČUN
@@ -170,12 +178,12 @@ print()
 
 input('Program je završio s radom, pritisni <enter> za kraj.')
 ```
-
+----
 Sada program provodi aritmetičke operacije s brojevima i ignorira prazan
 prostor oko operatora. Rezultat je sljedeći:
 
 ### Rezultat primjera 6.6
-
+----
 ```
 Unesi prvi broj: 3.14
 Odaberi operator (+,-): +
@@ -185,7 +193,7 @@ Rezultat je: 28.14
 
 Program je završio s radom, pritisni <enter> za kraj.
 ```
-
+----
 Nakon zaprimanja i pripreme korisničkog unosa, program provodi same
 izračune. Ova komponenta zapravo obavlja glavnu radnju cijelog programa.
 Obzirom da smo već sve potrebne informacije priredili i provjerili, ovaj
@@ -231,7 +239,7 @@ zašto. Kako bi izbjegli da se program ruši prilikom pogrešnog unosa
 broja, možemo iskoristiti naredbu `try` kako je prikazano u primjeru 6.7
 
 ### Primjer 6.7: Kalkulator - izbjegavanje rušenja prilikom pogrešnog unosa
-
+----
 ```python
 # 1. UNOS ULAZNIH PODATAKA
 # -------------------------
@@ -252,7 +260,7 @@ try: # pokušaj pretvoriti tekst u broj
  # ostatak kôda je isti kao i prije
  # ...
 ```
-
+----
 U ovom primjeru smo vidjeli i funkciju `quit` koja ne prima parametre i
 jednostavno prekida izvršavanje programa. Sav kôd nakon funkcije `quit`
 se neće izvršavati ukoliko se izvrši ta funkcija. Obzirom da je u našem
@@ -262,7 +270,7 @@ prikazanom slučaju je to kada program nije dobio validne ulaze i ne bi
 imalo smisla nastavljati s radom. Primjer možemo vidjeti u akciji na
 sljedećem ispisu:
 ### Rezultat primjera 6.7
-
+----
 ```
  Unesi prvi broj: 3.14
  Odaberi operator (+,-): +
@@ -270,7 +278,7 @@ sljedećem ispisu:
  
  GREŠKA: Oblik broja nije prepoznat! Program završava s radom.
 ```
-
+----
 Kao što vidimo, program se sada ne ruši kad korisnik upiše pogrešan
 oblik broja i to čak ni kada korisnik prgavo (kakvi korisnici i jesu)
 upiše tekst `'neću!'` umjesto broja. Program nam je sada malo robusniji,
@@ -278,9 +286,10 @@ ali ima više mogućih dorada. Jedna važna dorada je mogućnost da provede
 više operacija u jednom pokretanju programa. To možemo postići pomoću
 onoga što već znamo o petlji `while` koja se ponavlja broj beskonačan
 broj puta i prestaje samo kada korisnik zatraži izlazak iz programa.
-Rješenje je prikazano u primjeru
-### Primjer 6.8: Kalkulator - ponovno izvršavanje
+Rješenje je prikazano u primjeru 6.8.
 
+### Primjer 6.8: Kalkulator - ponovno izvršavanje
+----
 ```python
  # svi znakovi koji su validne operacije
  validne_operacije = '+-I'
@@ -348,6 +357,7 @@ Rješenje je prikazano u primjeru
  
  input('Program je završio s radom, pritisni <enter> za kraj.')
 ```
+----
 
 Kao što vidimo, cijeli postupak smo prebacili unutar beskonačne `while`
 petlje koja time ponavlja cijeli naš dosadašnji program. Program smo
@@ -366,7 +376,7 @@ oduzimati, ali demonstrira nam mnoge različite koncepte u programiranju.
 Omogućava ponovljene radnje i otporan je na najčešće korisničke greške.
 Korištenje programa sada izgleda ovako:
 ### Rezultat primjera 6.8
-
+----
 ```
  ----------
  Odaberi operator (+,-) ili unesi "i" za izlaz: +
@@ -402,7 +412,7 @@ Korištenje programa sada izgleda ovako:
  ----------
  Program je završio s radom, pritisni <enter> za kraj.
 ```
-
+----
 Ipak, program je prebanalan kako bi bio od koristi kao stvaran
 kalkulator. Recimo da želimo zadovoljiti još barem dvije mogućnosti:
 
@@ -423,4 +433,5 @@ ovaj problem kad budemo naoružani znanjem kako kôd generalizirati i
 apstrahirati.
 
 [^1]: Koju vrstu vrijednosti vraća funkcija `input`?
+
 
